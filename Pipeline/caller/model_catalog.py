@@ -1,5 +1,6 @@
 from enum import Enum
 from abc import ABCMeta, abstractmethod
+from .apikey_checker import is_openai_apikey, is_google_apikey, is_anthropic_apikey
 
 class Models_Catalog(Enum):
     __metaclass__ = ABCMeta
@@ -28,16 +29,25 @@ class OAI_models(Models_Catalog):
     GPT_4_O = "gpt-4o"
     GPT_4 = "gpt-4-turbo"
 
+    def validate_api_key(api_key: str):
+        return is_openai_apikey(api_key)
+
 class Google_models(Models_Catalog):
     GEMINI_1_5 = "gemini-1.5"
     GEMINI_1_11 = "gemini-1.11"
     GEMINI_3_5 = "gemini-3.5"
     GEMINI_3_11 = "gemini-3.11"
+
+    def validate_api_key(api_key: str):
+        return is_google_apikey(api_key)
  
 class Anthropic_models(Models_Catalog):
     CLAUDE_3_OPUS = "claude-3-opus-20240229"
     CLAUDE_3_HAIKU = "claude-3-haiku-20240307"
     CLAUDE_3_SONNET = "claude-3-sonnet-20240229"
+
+    def validate_api_key(api_key: str):
+        return is_anthropic_apikey(api_key)
 
 def is_oai_model(model_name: str):
     return model_name in OAI_models.get_model_list()
