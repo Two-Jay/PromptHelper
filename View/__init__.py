@@ -1,15 +1,16 @@
 from enum import Enum
 import streamlit as st
-from typing import List
+from typing import List, Callable
 from dataclasses import dataclass
 from View.prompt_scoring import PromptScoring
 from View.multi_turn_prompt_scoring import MultiTurnPromptScoring
 from View.ngram_prompt_optimization import NgramPromptOptimization
+from View.sidebar_features import api_key_section, llm_config_section
 
 @dataclass
 class PageInfo:
     name: str
-    caller: callable
+    caller: Callable
 
 class Pages(Enum):
     prompt_scoring = PageInfo("prompt_scoring", PromptScoring.render)
@@ -39,6 +40,14 @@ class Sidebar:
         for page in Pages:
             if page.name == self.get_selected_page():
                 page.caller()
+        self._additional_features()
+
+    def _additional_features(self):
+        component = st.sidebar
+        component.divider()
+        api_key_section(component)
+        component.divider()
+        llm_config_section(component)
 
 __all__ = ["Sidebar"]
 

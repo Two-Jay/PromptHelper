@@ -1,5 +1,5 @@
 import streamlit as st
-from controller.State import State
+from Controller.State import State
 from typing import Any
 
 class BaseView:
@@ -14,4 +14,12 @@ class BaseView:
 
     @classmethod
     def set_state(cls, key: str, value: Any) -> None:
+        cls.state_manager.set(key, value)
+
+    @classmethod
+    def __getitem__(cls, key: str) -> Any:
+        return cls.state_manager.get(key)
+
+    @classmethod
+    def __setitem__(cls, key: str, value: Any) -> None:
         cls.state_manager.set(key, value)
